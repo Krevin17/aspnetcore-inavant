@@ -21,6 +21,7 @@ builder.Services.AddDbContext<MyProjectContext>(db =>
 
 builder.Services.AddScoped<IAsyncRepository<SimpleEntity>, EFRepository<SimpleEntity>>();
 builder.Services.AddScoped<IAsyncRepository<ComplexEntity>, EFRepository<ComplexEntity>>();
+builder.Services.AddScoped<IAsyncRepository<NewEntity>, EFRepository<NewEntity>>();
 
 //Configuracion de JSON para que no cambie el case al hacer parse, y funcione los controles de Kendo
 builder.Services.AddRazorPages()
