@@ -29,6 +29,14 @@ builder.Services.AddRazorPages()
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<MyProjectContext>();
+    context.Database.Migrate();
+    context.Seed();
+}
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

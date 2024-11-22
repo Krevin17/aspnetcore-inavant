@@ -22,5 +22,23 @@ namespace Empresa.Proyecto.Infra.Data
         {           
             builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
         }
+
+        /// <summary>
+        /// Metodo para iniciar bd con registros en SimpleEntity
+        /// </summary>
+        public void Seed()
+        {
+            if (!SimpleEntity.Any())
+            {
+                SimpleEntity.AddRange(new[]
+                {
+                    new SimpleEntity { Name = "Nuevo", Value = "1", Created = DateTime.UtcNow, Modified = DateTime.UtcNow },
+                    new SimpleEntity { Name = "Existente", Value = "2", Created = DateTime.UtcNow, Modified = DateTime.UtcNow },
+                    new SimpleEntity { Name = "Reconstruido", Value = "3", Created = DateTime.UtcNow, Modified = DateTime.UtcNow }
+                    });
+
+                SaveChanges();
+            }
+        }
     }
 }
