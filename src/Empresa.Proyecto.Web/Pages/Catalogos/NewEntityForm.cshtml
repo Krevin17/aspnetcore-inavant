@@ -1,0 +1,102 @@
+﻿@page
+@model Empresa.Proyecto.Web.Pages.Catalogos.NewEntityFormModel
+@{
+    ViewData["Title"] = "New Entity";
+}
+
+<h1>New Entity</h1>
+
+<form method="post" class="needs-validation mb-3" novalidate>
+    <div class="mb-3">
+        <label for="Name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+        <div class="invalid-feedback">
+            Ingrese Nombre.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="SelectedOptionId" class="form-label">Opción</label>
+        <select id="SelectedOptionId" class="form-select" name="SelectedOptionId" required>
+            <option value="" selected>Seleccione una opción</option>
+            @foreach (var option in Model.Options)
+            {
+                <option value="@option.Id">@option.Name</option>
+            }
+        </select>
+        <div class="invalid-feedback">
+            Seleccione una opción valida
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+<div class="mb-3">
+    <table id="newEntities" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Opción</th>
+                <th>Creado</th>
+                <th>Modificado</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+            (() => {
+          'use strict'
+
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          const forms = document.querySelectorAll('.needs-validation')
+
+          // Loop over them and prevent submission
+          Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+
+              form.classList.add('was-validated')
+            }, false)
+          })
+        })()
+        $(document).ready(function() {
+            $('#newEntities').DataTable({
+                "ajax": {
+                    url: "?handler=Catalog", 
+                    type: 'POST',
+                    headers: { 'RequestVerificationToken': $('@Html.AntiForgeryToken()').val() }
+                },
+                "ordering": false,
+                columns: [
+                    { data: 'Id' },
+                    { data: 'Name' },
+                    { data: 'Option.Name' },  
+                    {
+                        data: 'Created',
+                        render: function(data, type, row) {
+                            return new Date(data).toLocaleDateString('es-MX', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric'
+                            });
+                        }
+                    },
+                    {
+                        data: 'Modified',
+                        render: function(data, type, row) {
+                            return new Date(data).toLocaleDateString('es-MX', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric'
+                            });
+                        }
+                    }
+                ]
+            });
+        })
+    </script>
+}
